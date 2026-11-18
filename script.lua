@@ -1,7 +1,7 @@
 --[[
-    ByteWTF FF3 - Football Fusion 3
-    UI: Rayfield
-    Credits: Original logic adapted for Rayfield UI
+    Xen FF3 - Football Fusion 3
+    UI: Airflow
+    Credits: Original logic adapted for Airflow UI
 ]]
 
 -- Services
@@ -19,28 +19,9 @@ while not Player do
     task.wait()
 end
 
+-- Load Airflow
 local Airflow = loadstring(game:HttpGet("https://raw.githubusercontent.com/PookiePepelsss/Airflow-UI/refs/heads/main/Source.luau"))()
 Airflow:LoadFont({Name = "ValleySans"})
-
-Airflow.Themes.FatalBlue = {
-    Background  = Color3.fromRGB(5,   10,  22),
-    Surface     = Color3.fromRGB(9,   16,  34),
-    Surface2    = Color3.fromRGB(13,  22,  45),
-    Surface3    = Color3.fromRGB(20,  32,  60),
-    Stroke      = Color3.fromRGB(28,  45,  90),
-    StrokeHover = Color3.fromRGB(55,  90, 180),
-    Accent      = Color3.fromRGB(60,  120, 255),
-    AccentDark  = Color3.fromRGB(8,   18,  50),
-    Text        = Color3.fromRGB(220, 230, 255),
-    Muted       = Color3.fromRGB(110, 140, 200),
-    Glow        = Color3.fromRGB(60,  120, 255),
-    Warning     = Color3.fromRGB(240, 176, 108),
-    Success     = Color3.fromRGB(150, 220, 170),
-    Error       = Color3.fromRGB(240, 120, 120),
-}
-
-Airflow.Assets.Logo = "rbxassetid://711561549551023"
-
 
 -- Settings
 local autocatchon = false
@@ -325,23 +306,20 @@ local function TriggerTouchEvent()
 end
 
 -- =====================
---       RAYFIELD UI
+--        AIRFLOW UI
 -- =====================
 
-local Window = Rayfield:CreateWindow({
-    Name = "Xen FF3",
-    Icon = 0,
-    LoadingTitle = "Xen FF3",
-    LoadingSubtitle = "Football Fusion 3",
-    Theme = "Default",
-    DisableRayfieldPrompts = false,
-    DisableBuildWarnings = false,
+local Window = Airflow:CreateWindow({
+    Title = "ByteWTF",
+    Subtitle = "ByteWTF ff3",
+    LoadingTitle = "BYTE FF3",
+    LoadingText = "Football Fusion 3",
+    Keybind = Enum.KeyCode.RightControl,
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "XenFF3",
         FileName = "XenFF3Config"
     },
-    KeySystem = false,
 })
 
 -- =====================
@@ -355,7 +333,7 @@ local MagsSection = CatchingTab:CreateSection("Magnetism")
 
 CatchingTab:CreateToggle({
     Name = "Mags",
-    CurrentValue = false,
+    Default = false,
     Flag = "MagsToggle",
     Callback = function(Value)
         magson = Value
@@ -372,7 +350,7 @@ local MagsRangeSlider = CatchingTab:CreateSlider({
     Range = {1, 30},
     Increment = 0.1,
     Suffix = " studs",
-    CurrentValue = 20,
+    Default = 20,
     Flag = "MagsRange",
     Callback = function(Value)
         magsrange = Value
@@ -385,7 +363,7 @@ CatchingTab:CreateSlider({
     Range = {0, 1},
     Increment = 0.1,
     Suffix = "s",
-    CurrentValue = 0,
+    Default = 0,
     Flag = "MagsDelay",
     Callback = function(Value)
         magsdelay = Value
@@ -396,10 +374,11 @@ CatchingTab:CreateSlider({
 CatchingTab:CreateDropdown({
     Name = "Mag Type",
     Options = {"Blatant", "Legit"},
-    CurrentOption = {"Blatant"},
+    Default = "Blatant",
     Flag = "MagType",
     Callback = function(Option)
-        local val = Option[1]
+        -- Airflow passes a plain string for single-select dropdowns
+        local val = type(Option) == "table" and Option[1] or Option
         local newRange = (val == "Blatant") and 20 or 8
         magsrange = newRange
         pcall(function() MagsRangeSlider:Set(newRange) end)
@@ -409,16 +388,16 @@ CatchingTab:CreateDropdown({
 CatchingTab:CreateDropdown({
     Name = "Mag Mode",
     Options = {"FTI", "CFrame"},
-    CurrentOption = {"FTI"},
+    Default = "FTI",
     Flag = "MagMode",
     Callback = function(Option)
-        magmode = Option[1]
+        magmode = type(Option) == "table" and Option[1] or Option
     end,
 })
 
 CatchingTab:CreateToggle({
     Name = "Show Hitbox",
-    CurrentValue = false,
+    Default = false,
     Flag = "ShowHitbox",
     Callback = function(Value)
         showhitboxon = Value
@@ -435,7 +414,7 @@ local AutoCatchSection = CatchingTab:CreateSection("Auto Catch")
 
 CatchingTab:CreateToggle({
     Name = "Auto Catch",
-    CurrentValue = false,
+    Default = false,
     Flag = "AutoCatch",
     Callback = function(Value)
         autocatchon = Value
@@ -447,7 +426,7 @@ CatchingTab:CreateSlider({
     Range = {1, 25},
     Increment = 1,
     Suffix = " studs",
-    CurrentValue = 10,
+    Default = 10,
     Flag = "AutoCatchRadius",
     Callback = function(Value)
         catchdistance = Value
@@ -459,7 +438,7 @@ local CatchResizeSection = CatchingTab:CreateSection("Catch Resize")
 
 CatchingTab:CreateToggle({
     Name = "Catch Resize",
-    CurrentValue = false,
+    Default = false,
     Flag = "CatchResize",
     Callback = function(Value)
         catchresizeon = Value
@@ -472,7 +451,7 @@ CatchingTab:CreateSlider({
     Range = {1, 20},
     Increment = 0.5,
     Suffix = " studs",
-    CurrentValue = 10,
+    Default = 10,
     Flag = "CatchResizeRange",
     Callback = function(Value)
         catchresizerange = Value
@@ -485,7 +464,7 @@ local BallPathSection = CatchingTab:CreateSection("Ball Path")
 
 CatchingTab:CreateToggle({
     Name = "Ball Path",
-    CurrentValue = false,
+    Default = false,
     Flag = "BallPath",
     Callback = function(Value)
         ballpathOn = Value
@@ -561,7 +540,7 @@ local SpeedSection = PhysicsTab:CreateSection("Speed")
 
 PhysicsTab:CreateToggle({
     Name = "CFrame Speed",
-    CurrentValue = false,
+    Default = false,
     Flag = "CFrameSpeed",
     Callback = function(Value)
         speedEnabled = Value
@@ -573,7 +552,7 @@ PhysicsTab:CreateSlider({
     Name = "Speed Value",
     Range = {0.1, 1.2},
     Increment = 0.1,
-    CurrentValue = 0.1,
+    Default = 0.1,
     Flag = "SpeedValue",
     Callback = function(Value)
         speedValue = Value
@@ -585,7 +564,7 @@ local JumpSection = PhysicsTab:CreateSection("Jump Power")
 
 PhysicsTab:CreateToggle({
     Name = "Jump Power",
-    CurrentValue = false,
+    Default = false,
     Flag = "JumpPower",
     Callback = function(Value)
         jumpoweron = Value
@@ -596,7 +575,7 @@ PhysicsTab:CreateSlider({
     Name = "Jump Boost",
     Range = {50, 65},
     Increment = 1,
-    CurrentValue = 50,
+    Default = 50,
     Flag = "JumpBoost",
     Callback = function(Value)
         jumpboost = Value
@@ -608,7 +587,7 @@ local JumpCDSection = PhysicsTab:CreateSection("Jump Cooldown")
 
 PhysicsTab:CreateToggle({
     Name = "No Jump Cooldown",
-    CurrentValue = false,
+    Default = false,
     Flag = "NoJumpCooldown",
     Callback = function(Value)
         nojpcooldownon = Value
@@ -626,7 +605,7 @@ local PullSection = PhysicsTab:CreateSection("Pull Vector")
 
 PhysicsTab:CreateToggle({
     Name = "Pull Vector",
-    CurrentValue = false,
+    Default = false,
     Flag = "PullVector",
     Callback = function(Value)
         pullvector = Value
@@ -637,7 +616,7 @@ PhysicsTab:CreateSlider({
     Name = "Pull Vector Speed",
     Range = {1, 3},
     Increment = 0.1,
-    CurrentValue = 1,
+    Default = 1,
     Flag = "PullSpeed",
     Callback = function(Value)
         pullvectorpower = Value
@@ -649,7 +628,7 @@ PhysicsTab:CreateSlider({
     Range = {1, 25},
     Increment = 1,
     Suffix = " studs",
-    CurrentValue = 5,
+    Default = 5,
     Flag = "PullRadius",
     Callback = function(Value)
         pullvectordistance = Value
@@ -661,7 +640,7 @@ local TackleSection = PhysicsTab:CreateSection("Tackle")
 
 PhysicsTab:CreateToggle({
     Name = "Click Tackle",
-    CurrentValue = false,
+    Default = false,
     Flag = "ClickTackle",
     Callback = function(Value)
         clicktackleon = Value
@@ -673,7 +652,7 @@ PhysicsTab:CreateSlider({
     Range = {1, 15},
     Increment = 1,
     Suffix = " studs",
-    CurrentValue = 5,
+    Default = 5,
     Flag = "ClickTackleRange",
     Callback = function(Value)
         clicktacklerange = Value
@@ -685,7 +664,7 @@ local MiscSection = PhysicsTab:CreateSection("Misc")
 
 PhysicsTab:CreateToggle({
     Name = "Delete Out Of Bounds",
-    CurrentValue = false,
+    Default = false,
     Flag = "DeleteOOB",
     Callback = function(Value)
         deleteOOBEnabled = Value
@@ -724,7 +703,7 @@ SettingsTab:CreateButton({
             if conn then conn:Disconnect() end
         end
         njcconnections = {}
-        Rayfield:Destroy()
+        Window:Destroy()
     end,
 })
 
@@ -853,9 +832,10 @@ Player.CharacterAdded:Connect(function(char)
     njc(char)
 end)
 
-Rayfield:Notify({
-    Title = "ByteWTF",
+Airflow:Notify({
+    Title = "Byte.WTF",
     Content = "Script loaded successfully!",
     Duration = 5,
-    Image = 4483362458,
+    Type = "Success",
+    Icon = "check",
 })
