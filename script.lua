@@ -19,8 +19,28 @@ while not Player do
     task.wait()
 end
 
--- Load Rayfield
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+local Airflow = loadstring(game:HttpGet("https://raw.githubusercontent.com/PookiePepelsss/Airflow-UI/refs/heads/main/Source.luau"))()
+Airflow:LoadFont({Name = "ValleySans"})
+
+Airflow.Themes.FatalBlue = {
+    Background  = Color3.fromRGB(5,   10,  22),
+    Surface     = Color3.fromRGB(9,   16,  34),
+    Surface2    = Color3.fromRGB(13,  22,  45),
+    Surface3    = Color3.fromRGB(20,  32,  60),
+    Stroke      = Color3.fromRGB(28,  45,  90),
+    StrokeHover = Color3.fromRGB(55,  90, 180),
+    Accent      = Color3.fromRGB(60,  120, 255),
+    AccentDark  = Color3.fromRGB(8,   18,  50),
+    Text        = Color3.fromRGB(220, 230, 255),
+    Muted       = Color3.fromRGB(110, 140, 200),
+    Glow        = Color3.fromRGB(60,  120, 255),
+    Warning     = Color3.fromRGB(240, 176, 108),
+    Success     = Color3.fromRGB(150, 220, 170),
+    Error       = Color3.fromRGB(240, 120, 120),
+}
+
+Airflow.Assets.Logo = "rbxassetid://711561549551023"
+
 
 -- Settings
 local autocatchon = false
